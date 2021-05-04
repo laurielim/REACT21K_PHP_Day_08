@@ -10,8 +10,17 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class HomeScreenController extends AbstractController
 {
-    #[Route('/home', name: 'home_screen')]
+    #[Route('/', name: 'index')]
     public function index(Request $request): Response
+    {
+
+        return new Response('<h1>Hello World</h1>');
+
+    }
+
+
+    #[Route('/home', name: 'home_screen')]
+    public function home(Request $request): Response
     {
         return $this->json([
             // Universal way to get parameters inside symfony:
@@ -50,21 +59,34 @@ class HomeScreenController extends AbstractController
         return $this->json($response);
     }
 
-    #[Route('/recipes/add', name: 'add_new_recipe')]
+    #[Route('/recipes/add', name: 'add_new_recipe', methods:["POST"])]
     public function addRecipe(Request $request): Response
     {
         // Entity managers helps add
         $entityManager = $this->getDoctrine()->getManager();
 
+        // Get POSTED data
+        $uri = $_SERVER['REQUEST_URI'];
+        $parts = parse_url($uri);
+        parse_str($parts['query'], $params);
+
         $newRecipe = new Recipe();
-        $newRecipe->setName('Waffles');
-        $newRecipe->setIngredients('eggs, flour');
-        $newRecipe->setDifficulty('mediums');
+        $newRecipe->setName($params['name']);
+        $newRecipe->setIngredients($params['ingredients']);
+        $newRecipe->setDifficulty($params['difficulty']);
+
+        $response [] = array(
+            'name'=>$newRecipe->getName(),
+            'ingredients'=>$newRecipe->getIngredients(),
+            'difficulty'=>$newRecipe->getDifficulty()
+        );
 
         $entityManager->persist($newRecipe);
         $entityManager->flush();
 
+
         return new Response('trying to add new recipe...' . $newRecipe->getId());
+        // return new Response(json_encode($response));
     }
 
     #[Route('/recipes/{id}', name: 'get_a_recipe', methods: ['GET'])]
