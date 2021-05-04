@@ -6,13 +6,19 @@ This repo contains the class exercise we did on day 8 of the [Programming in PHP
 
 Built with:
 
-- HTML
 - PHP
 - Symfony
 
 Hosted on:
 
 - Heroku
+
+## Setup and Usage
+
+```bash
+composer require maker
+composer require orm
+```
 
 ## Sources
 
