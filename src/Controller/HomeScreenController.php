@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Recipe;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,6 +33,23 @@ class HomeScreenController extends AbstractController
         $recipes = file_get_contents($rootPath.'/resources/recipes.json');
         $decodedRecipes = json_decode($recipes, true);
         return $this->json($decodedRecipes);
+    }
+
+    #[Route('/recipes/add', name: 'add_new_recipe')]
+    public function addRecipe(Request $request): Response
+    {
+        // Entity managers helps add
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $newRecipe = new Recipe();
+        $newRecipe->setName('Omelette');
+        $newRecipe->setIngredients('eggs, oil');
+        $newRecipe->setDifficulty('easy');
+
+        $entityManager->persist($newRecipe);
+        $entityManager->flush();
+
+        return new Response('trying to add new recipe...' . $newRecipe->getId());
     }
 
     #[Route('/recipes/{id}', name: 'get_a_recipe', methods: ['GET'])]
