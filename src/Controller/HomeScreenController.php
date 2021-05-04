@@ -66,14 +66,14 @@ class HomeScreenController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
 
         // Get POSTED data
-        $uri = $_SERVER['REQUEST_URI'];
-        $parts = parse_url($uri);
-        parse_str($parts['query'], $params);
+        $name = $request->query->get('page');
+        $ingredients = $request->query->get('ingredients');
+        $difficulty = $request->query->get('difficulty');
 
         $newRecipe = new Recipe();
-        $newRecipe->setName($params['name']);
-        $newRecipe->setIngredients($params['ingredients']);
-        $newRecipe->setDifficulty($params['difficulty']);
+        $newRecipe->setName($name);
+        $newRecipe->setIngredients($ingredients);
+        $newRecipe->setDifficulty($difficulty);
 
         $response [] = array(
             'name'=>$newRecipe->getName(),
