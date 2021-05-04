@@ -29,10 +29,25 @@ class HomeScreenController extends AbstractController
     #[Route('/recipes/all', name: 'get_all_recipes', methods: ['GET'])]
     public function getAllRecipes(Request $request): Response
     {
+        /*
+        // Get Recipes from JSON
         $rootPath = $this->getParameter('kernel.project_dir');
         $recipes = file_get_contents($rootPath.'/resources/recipes.json');
         $decodedRecipes = json_decode($recipes, true);
-        return $this->json($decodedRecipes);
+        return $this->json($decodedRecipes);*/
+
+        // Get Recipes from SQLite db
+        $recipes = $this->getDoctrine()->getRepository(Recipe::class)->findAll();
+        $response=[];
+        // Get data of each instance of class Recipe
+        foreach($recipes as $recipe) {
+            $response [] = array(
+                'name'=>$recipe->getName(),
+                'ingredients'=>$recipe->getIngredients(),
+                'difficulty'=>$recipe->getDifficulty()
+            );
+        }
+        return $this->json($response);
     }
 
     #[Route('/recipes/add', name: 'add_new_recipe')]
@@ -42,9 +57,9 @@ class HomeScreenController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
 
         $newRecipe = new Recipe();
-        $newRecipe->setName('Omelette');
-        $newRecipe->setIngredients('eggs, oil');
-        $newRecipe->setDifficulty('easy');
+        $newRecipe->setName('Waffles');
+        $newRecipe->setIngredients('eggs, flour');
+        $newRecipe->setDifficulty('mediums');
 
         $entityManager->persist($newRecipe);
         $entityManager->flush();
