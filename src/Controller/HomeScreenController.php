@@ -66,7 +66,7 @@ class HomeScreenController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
 
         // Get POSTED data
-        $name = $request->query->get('page');
+        $name = $request->query->get('name');
         $ingredients = $request->query->get('ingredients');
         $difficulty = $request->query->get('difficulty');
 
