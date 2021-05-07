@@ -89,7 +89,7 @@ class HomeScreenController extends AbstractController
         // return new Response(json_encode($response));
     }
 
-    #[Route('/recipes/{id}', name: 'get_a_recipe', methods: ['GET'])]
+/*    #[Route('/recipes/{id}', name: 'get_a_recipe', methods: ['GET'])]
     public function recipes($id, Request $request): Response
     {
         return $this->json([
@@ -97,7 +97,7 @@ class HomeScreenController extends AbstractController
             'message' => 'Requesting recipe with id ' . $id,
             'page' => $request->query->get('page')
         ]);
-    }
+    }*/
 
 }
 
