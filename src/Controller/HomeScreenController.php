@@ -62,7 +62,7 @@ class HomeScreenController extends AbstractController
     #[Route('/recipes/add', name: 'add_new_recipe', methods:["POST"])]
     public function addRecipe(Request $request): Response
     {
-        // Entity managers helps add
+        // Entity managers helps manage db
         $entityManager = $this->getDoctrine()->getManager();
 
         // Get POSTED data
@@ -75,18 +75,18 @@ class HomeScreenController extends AbstractController
         $newRecipe->setIngredients($ingredients);
         $newRecipe->setDifficulty($difficulty);
 
-        $response [] = array(
+ /*       $response [] = array(
             'name'=>$newRecipe->getName(),
             'ingredients'=>$newRecipe->getIngredients(),
             'difficulty'=>$newRecipe->getDifficulty()
-        );
+        );*/
 
         $entityManager->persist($newRecipe);
         $entityManager->flush();
 
 
-        return new Response('trying to add new recipe...' . $newRecipe->getId());
-        // return new Response(json_encode($response));
+      return new Response('trying to add new recipe...' . $newRecipe->getId());
+//         return new Response(json_encode($response));
     }
 
 /*    #[Route('/recipes/{id}', name: 'get_a_recipe', methods: ['GET'])]
@@ -98,6 +98,62 @@ class HomeScreenController extends AbstractController
             'page' => $request->query->get('page')
         ]);
     }*/
+
+    #[Route('/recipes/find/{id}', name: 'find_a_recipe', methods: ['GET'])]
+    public function findRecipe($id): Response {
+        $recipe = $this->getDoctrine()->getRepository(Recipe::class)->find($id);
+
+        if (!$recipe) {
+            throw $this->createNotFoundException(
+                'No recipe was found with the id: ' . $id
+            );
+        } else {
+            return $this->json([
+                'id' => $recipe->getId(),
+                'name' => $recipe->getName(),
+                'ingredients' => $recipe->getIngredients(),
+                'difficulty' => $recipe->getDifficulty()
+            ]);
+        }
+    }
+
+    #[Route('/recipes/edit/{id}/{name}', name: 'edit_a_recipe', methods: ['PUT'])]
+    public function editRecipe($id, $name): Response {
+        $entityManager = $this->getDoctrine()->getManager();
+        $recipe = $this->getDoctrine()->getRepository(Recipe::class)->find($id);
+
+        if (!$recipe) {
+            throw $this->createNotFoundException(
+                'No recipe was found with the id: ' . $id
+            );
+        } else {
+            $recipe->setName($name);
+            $entityManager->flush();
+
+            return $this->json([
+                'message' => 'Edited a recipe with id ' . $id
+            ]);
+        }
+    }
+
+    #[Route('/recipes/remove/{id}', name: 'REMOVE_a_recipe', methods: ['DELETE'])]
+    public function removeRecipe($id):Response {
+        $entityManager = $this->getDoctrine()->getManager();
+        $recipe = $this->getDoctrine()->getRepository(Recipe::class)->find($id);
+
+        if (!$recipe) {
+            throw $this->createNotFoundException(
+                'No recipe was found with the id: ' . $id
+            );
+        } else {
+            $entityManager->remove($recipe);
+            $entityManager->flush();
+
+            return $this->json([
+                'message' => 'Removed the recipe with id ' . $id
+            ]);
+        }
+    }
 
 }
 
