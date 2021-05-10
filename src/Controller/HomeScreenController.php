@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Recipe;
+use App\Entity\RecipeList;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -80,6 +81,13 @@ class HomeScreenController extends AbstractController
             'ingredients'=>$newRecipe->getIngredients(),
             'difficulty'=>$newRecipe->getDifficulty()
         );*/
+
+/*        $newRecipe = new RecipeList();
+        $newRecipe->setName('omelette');
+        $newRecipe->setDescription('an omelette or omelet is a dish made from beaten eggs, fried with butter or oil in a frying pan. It is quite common for the omelette to be folded around fillings such as cheese, chives, vegetables, mushrooms, meat, or some combination of the above.');
+        $newRecipe->setIngredients(array('eggs', 'oil', 'salt', 'pepper'));
+        $newRecipe->setInstructions((array('beat eggs', 'fry in oil')));*/
+
 
         $entityManager->persist($newRecipe);
         $entityManager->flush();
