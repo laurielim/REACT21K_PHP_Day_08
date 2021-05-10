@@ -32,8 +32,8 @@ class HomeScreenController extends AbstractController
 
 //    Use name inside of routes to be able to redirect
    #[Route('/other')]
-    public function other() {
-        return $this ->redirectToRoute(route:'home_screen');
+    public function other(): Response {
+        return $this->redirectToRoute(route:'home_screen');
     }
 
     #[Route('/recipes/all', name: 'get_all_recipes', methods: ['GET'])]
@@ -47,14 +47,17 @@ class HomeScreenController extends AbstractController
         return $this->json($decodedRecipes);*/
 
         // Get Recipes from SQLite db
-        $recipes = $this->getDoctrine()->getRepository(Recipe::class)->findAll();
+//        $recipes = $this->getDoctrine()->getRepository(Recipe::class)->findAll();
+        $recipes = $this->getDoctrine()->getRepository(RecipeList::class)->findAll();
         $response=[];
         // Get data of each instance of class Recipe
         foreach($recipes as $recipe) {
             $response [] = array(
                 'name'=>$recipe->getName(),
+                'description'=>$recipe->getDescription(),
                 'ingredients'=>$recipe->getIngredients(),
-                'difficulty'=>$recipe->getDifficulty()
+                'instructions'=>$recipe->getInstructions()
+//                'difficulty'=>$recipe->getDifficulty()
             );
         }
         return $this->json($response);
@@ -67,14 +70,14 @@ class HomeScreenController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
 
         // Get POSTED data
-        $name = $request->query->get('name');
+        /*$name = $request->query->get('name');
         $ingredients = $request->query->get('ingredients');
         $difficulty = $request->query->get('difficulty');
 
         $newRecipe = new Recipe();
         $newRecipe->setName($name);
         $newRecipe->setIngredients($ingredients);
-        $newRecipe->setDifficulty($difficulty);
+        $newRecipe->setDifficulty($difficulty);*/
 
  /*       $response [] = array(
             'name'=>$newRecipe->getName(),
@@ -82,19 +85,32 @@ class HomeScreenController extends AbstractController
             'difficulty'=>$newRecipe->getDifficulty()
         );*/
 
-/*        $newRecipe = new RecipeList();
-        $newRecipe->setName('omelette');
-        $newRecipe->setDescription('an omelette or omelet is a dish made from beaten eggs, fried with butter or oil in a frying pan. It is quite common for the omelette to be folded around fillings such as cheese, chives, vegetables, mushrooms, meat, or some combination of the above.');
-        $newRecipe->setIngredients(array('eggs', 'oil', 'salt', 'pepper'));
-        $newRecipe->setInstructions((array('beat eggs', 'fry in oil')));*/
+        $data = json_decode($request->getContent(), true);
 
+        $response [] = array(
+            'name'=>$data['name'],
+            'description'=>$data['desc'],
+            'ingredients'=>$data['ingredients'],
+            'instructions'=>$data['instructions']
+        );
 
-        $entityManager->persist($newRecipe);
-        $entityManager->flush();
+/*            $name=$data['name'];
+            $description=$data['desc'];
+            $ingredients=$data['ingredients'];
+            $instructions=$data['instructions'];*/
+
+        $newRecipe = new RecipeList();
+        $newRecipe->setName($data['name']);
+        $newRecipe->setDescription($data['desc']);
+        $newRecipe->setIngredients($data['ingredients']);
+        $newRecipe->setInstructions($data['instructions']);
+
+       $entityManager->persist($newRecipe);
+       $entityManager->flush();
 
 
       return new Response('trying to add new recipe...' . $newRecipe->getId());
-//         return new Response(json_encode($response));
+//         return new Response(json_encode($newRecipe->getInstructions()));
     }
 
 /*    #[Route('/recipes/{id}', name: 'get_a_recipe', methods: ['GET'])]
