@@ -1,6 +1,6 @@
 # Routing and Deploying a Symfony Project
 
-This repo contains the class exercise we did on day 8 of the [Programming in PHP](https://github.com/laurielim/REACT21K_PHP) course which is part of the Full Stack Web Development Program at [Business College Helsinki](https://en.bc.fi/qualifications/full-stack-web-developer-program/). It's deployed on Heroku and you can access the [home route](https://obscure-beach-24190.herokuapp.com/home) and the [recipes route](https://obscure-beach-24190.herokuapp.com/recipes/all).
+This repo contains the class exercise we did on day 8 of the [Programming in PHP](https://github.com/laurielim/REACT21K_PHP) course which is part of the Full Stack Web Development Program at [Business College Helsinki](https://en.bc.fi/qualifications/full-stack-web-developer-program/). It's deployed on Heroku and you can access the [home route](//lit-bastion-54851.herokuapp.com/home) and the [recipes route](//lit-bastion-54851.herokuapp.com/recipes/all).
 
 An SQL database was also enabled with CRUD commands implemented. The local db is running on SQLite and the hosted version uses Heroku Postrgres.
 
