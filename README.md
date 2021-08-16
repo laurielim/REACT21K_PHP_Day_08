@@ -4,6 +4,8 @@ This repo contains the class exercise we did on day 8 of the [Programming in PHP
 
 An SQL database was also enabled with CRUD commands implemented. The local db is running on SQLite and the hosted version uses Heroku Postrgres.
 
+I have also repurposed this Symfony App to manage the back-end of a [To Do application](https://github.com/laurielim/REACT21K_REACT_JS_TODO_APP) I was tasked to do for the React and Redux advanced course of the program and subsequent projects.
+
 ## Technologies used
 
 Built with:
